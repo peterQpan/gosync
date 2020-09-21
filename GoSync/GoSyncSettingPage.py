@@ -1,8 +1,11 @@
-import wx, subprocess, sys
-#import wx.lib.agw.customtreectrl as CT
-#from pydrive.drive import GoogleDrive
-#from pydrive.auth import GoogleAuth
-try :
+import subprocess
+import sys
+import wx
+
+# import wx.lib.agw.customtreectrl as CT
+# from pydrive.drive import GoogleDrive
+# from pydrive.auth import GoogleAuth
+try:
     from .GoSyncEvents import *
 except (ImportError, ValueError):
     from GoSyncEvents import *
@@ -10,6 +13,7 @@ except (ImportError, ValueError):
 use_system_notifs = True
 
 sync_help = "GoSync monitors the local mirror directory for any changes like Add, Move, Delete. These changes are immediately reflected your Google Drive. But the sync from the Google Drive is done on a periodic basis. Below you can change the interval at which the remote Drive is sync'ed locally. More aggressive adds more network traffic."
+
 
 class SettingsPage(wx.Panel):
     def __init__(self, parent, sync_model):
@@ -26,11 +30,11 @@ class SettingsPage(wx.Panel):
         self.cb.Bind(wx.EVT_CHECKBOX, self.AutoSyncSetting)
         self.notif_cb.Bind(wx.EVT_CHECKBOX, self.OnUseSystemNotif)
         self.log_choice = wx.Choice(self, -1, choices=["Error", "Information", "Debugging"], name="LevelChoice")
-        self.log_choice.SetSelection(self.sync_model.GetLogLevel()-1)
+        self.log_choice.SetSelection(self.sync_model.GetLogLevel() - 1)
         self.lct = wx.StaticText(self, -1, "Debug Level: ")
         self.log_choice.Bind(wx.EVT_CHOICE, self.OnDebugLogChoice)
 
-        self.md = wx.StaticText(self, -1, self.sync_model.GetLocalMirrorDirectory(), pos=(0,0))
+        self.md = wx.StaticText(self, -1, self.sync_model.GetLocalMirrorDirectory(), pos=(0, 0))
         self.md.SetFont(headerFont)
         self.si_spin_text = wx.StaticText(self, -1, "Sync Interval (in seconds): ")
 
@@ -56,18 +60,18 @@ class SettingsPage(wx.Panel):
         si_spin_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         si_spin_sizer.Add(self.si_spin_text, 0, wx.ALL | wx.ALIGN_CENTER)
-        si_spin_sizer.Add(self.si_spin_btn, 1, wx.ALL|wx.ALIGN_CENTER)
+        si_spin_sizer.Add(self.si_spin_btn, 1, wx.ALL | wx.ALIGN_CENTER)
 
-        debug_sizer.Add(self.lct, 0, wx.ALL|wx.ALIGN_CENTER)
+        debug_sizer.Add(self.lct, 0, wx.ALL | wx.ALIGN_CENTER)
         debug_sizer.AddSpacer(80)
-        debug_sizer.Add(self.log_choice, 1, wx.ALL|wx.ALIGN_CENTER)
+        debug_sizer.Add(self.log_choice, 1, wx.ALL | wx.ALIGN_CENTER)
 
-        button_sizer.Add(self.md_button, 1, wx.ALL|wx.ALIGN_CENTER, border=5)
-        button_sizer.Add(self.show_button, 2, wx.ALL|wx.ALIGN_CENTER)
+        button_sizer.Add(self.md_button, 1, wx.ALL | wx.ALIGN_CENTER, border=5)
+        button_sizer.Add(self.show_button, 2, wx.ALL | wx.ALIGN_CENTER)
 
-        ssizer.Add(self.md, 0, wx.ALL|wx.ALIGN_CENTER, border=10)
+        ssizer.Add(self.md, 0, wx.ALL | wx.ALIGN_CENTER, border=10)
         ssizer.AddSpacer(10)
-        ssizer.Add(button_sizer, 1, wx.ALL|wx.ALIGN_CENTER)
+        ssizer.Add(button_sizer, 1, wx.ALL | wx.ALIGN_CENTER)
 
         osizer.Add(self.cb, 0, wx.ALL, 0)
         osizer.Add(self.notif_cb, 1, wx.ALL, 0)
@@ -77,16 +81,16 @@ class SettingsPage(wx.Panel):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.AddSpacer(10)
-        sizer.Add(ssizer, 0, wx.EXPAND|wx.ALL)
+        sizer.Add(ssizer, 0, wx.EXPAND | wx.ALL)
         sizer.AddSpacer(20)
-        sizer.Add(osizer, 1, wx.ALL|wx.EXPAND)
+        sizer.Add(osizer, 1, wx.ALL | wx.EXPAND)
         sizer.AddSpacer(5)
         self.SetSizerAndFit(sizer)
         self.cb.SetValue(self.sync_model.GetAutoSyncState())
         self.notif_cb.SetValue(self.sync_model.GetUseSystemNotifSetting())
 
     def OnDebugLogChoice(self, event):
-        lvl = self.log_choice.GetSelection()+1
+        lvl = self.log_choice.GetSelection() + 1
         self.sync_model.SetLogLevel(lvl)
 
     def AutoSyncSetting(self, event):
@@ -102,8 +106,8 @@ class SettingsPage(wx.Panel):
             self.sync_model.SetUseSystemNotifSetting(False)
 
     def OnSyncIntervalSelect(self, event):
-         interval = event.GetInt()
-         self.sync_model.SetSyncInterval(interval)
+        interval = event.GetInt()
+        self.sync_model.SetSyncInterval(interval)
 
     def OnOpenMirror(self, event):
         subprocess.check_call(['xdg-open', self.sync_model.GetLocalMirrorDirectory()])
