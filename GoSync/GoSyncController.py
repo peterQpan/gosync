@@ -16,38 +16,40 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import wx, os, time
 import sys
+
 if sys.version_info > (3,):
     long = int
-try :
-	import wx.adv
-	wxgtk4 = True
+try:
+    import wx.adv
+
+    wxgtk4 = True
 except (ImportError, ValueError):
-	wxgtk4 = False
-import sys, os, wx, ntpath, threading, math, webbrowser
-from threading import Timer
-try :
-	from .GoSyncModel import GoSyncModel, ClientSecretsNotFound
-	from .defines import *
-	from .DriveUsageBox import DriveUsageBox
-	from .GoSyncEvents import *
-	from .GoSyncSelectionPage import SelectionPage
-	from .GoSyncSettingPage import SettingsPage
+    wxgtk4 = False
+import os, wx, math, webbrowser
+
+try:
+    from .GoSyncModel import GoSyncModel, ClientSecretsNotFound
+    from .defines import *
+    from .DriveUsageBox import DriveUsageBox
+    from .GoSyncEvents import *
+    from .GoSyncSelectionPage import SelectionPage
+    from .GoSyncSettingPage import SettingsPage
 except (ImportError, ValueError):
-	from GoSyncModel import GoSyncModel, ClientSecretsNotFound
-	from defines import *
-	from DriveUsageBox import DriveUsageBox
-	from GoSyncEvents import *
-	from GoSyncSelectionPage import SelectionPage
-	from GoSyncSettingPage import SettingsPage
+    from GoSyncModel import GoSyncModel, ClientSecretsNotFound
+    from defines import *
+    from DriveUsageBox import DriveUsageBox
+    from GoSyncEvents import *
+    from GoSyncSelectionPage import SelectionPage
+    from GoSyncSettingPage import SettingsPage
 
 ID_SYNC_TOGGLE = wx.NewId()
 ID_SYNC_NOW = wx.NewId()
 ID_RECALC_USAGE = wx.NewId()
 
 mainWindowStyle = wx.DEFAULT_FRAME_STYLE & (~wx.CLOSE_BOX) & (~wx.MAXIMIZE_BOX) ^ (wx.RESIZE_BORDER)
-HERE=os.path.abspath(os.path.dirname(__file__))
+HERE = os.path.abspath(os.path.dirname(__file__))
+
 
 class PageAccount(wx.Panel):
     def __init__(self, parent, sync_model):
@@ -55,7 +57,7 @@ class PageAccount(wx.Panel):
 
         self.sync_model = sync_model
         self.totalFiles = 0
-        self.time_left=0
+        self.time_left = 0
 
         aboutdrive = sync_model.DriveInfo()
         self.driveUsageBar = DriveUsageBox(self, long(aboutdrive['storageQuota']['limit']), -1)
@@ -66,7 +68,6 @@ class PageAccount(wx.Panel):
         self.driveUsageBar.SetAudioUsage(0)
         self.driveUsageBar.SetPhotoUsage(0)
         self.driveUsageBar.RePaint()
-
 
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         mainsizer.AddSpacer(10)
@@ -105,9 +106,10 @@ class PageAccount(wx.Panel):
         self.totalFiles = event.data
         self.driveUsageBar.SetStatusMessage("Calculating your categorical Google Drive usage. Please wait.")
 
+
 class GoSyncController(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, title="GoSync", size=(490,500), style=mainWindowStyle)
+        wx.Frame.__init__(self, None, title="GoSync", size=(490, 500), style=mainWindowStyle)
 
         try:
             self.sync_model = GoSyncModel()
@@ -210,10 +212,11 @@ class GoSyncController(wx.Frame):
 
     def DisplayTitleBar(self):
         title_string = "GoSync - %s (%s used of %s)" % (self.aboutdrive['user']['displayName'],
-                self.FileSizeHumanize(long(self.aboutdrive['storageQuota']['usageInDrive'])), 
-                self.FileSizeHumanize(long(self.aboutdrive['storageQuota']['limit'])))
+                                                        self.FileSizeHumanize(
+                                                            long(self.aboutdrive['storageQuota']['usageInDrive'])),
+                                                        self.FileSizeHumanize(
+                                                            long(self.aboutdrive['storageQuota']['limit'])))
         self.SetTitle(title_string)
-
 
     def OnUsageCalculationStarted(self, event):
         self.pr_item.Enable(False)
@@ -274,13 +277,13 @@ class GoSyncController(wx.Frame):
             dial.Destroy()
             return
         elif self.sync_model.IsSyncRunning() == True:
-            dial = wx.MessageDialog(None, 'GoSync is currently syncing files from the Drive.\nThe usage will be refreshed later.',
+            dial = wx.MessageDialog(None,
+                                    'GoSync is currently syncing files from the Drive.\nThe usage will be refreshed later.',
                                     'In Progress', wx.OK | wx.ICON_WARNING)
             res = dial.ShowModal()
             dial.Destroy()
 
         self.sync_model.ForceDriveUsageCalculation()
-
 
     def OnSyncTimer(self, event):
         unicode_string = event.data.pop()
@@ -288,7 +291,7 @@ class GoSyncController(wx.Frame):
 
     def OnSyncStarted(self, event):
         if self.sync_model.GetUseSystemNotifSetting():
-            if wxgtk4 :
+            if wxgtk4:
                 nmsg = wx.adv.NotificationMessage(title="GoSync", message="Sync Started")
                 nmsg.SetFlags(wx.ICON_INFORMATION)
                 nmsg.Show(timeout=wx.adv.NotificationMessage.Timeout_Auto)
@@ -307,13 +310,13 @@ class GoSyncController(wx.Frame):
         unicode_string = event.data.pop()
         self.sb.SetStatusText(unicode_string.encode('ascii', 'ignore'))
 
-    #BusyStart : when a transfer starts
+    # BusyStart : when a transfer starts
     def OnBusyStart(self, event):
         self.IsBusy = True
         unicode_string = event.data.pop()
         self.sb.SetStatusText(unicode_string.encode('ascii', 'ignore'))
 
-    #BusyDone : when a transfer stops
+    # BusyDone : when a transfer stops
     def OnBusyDone(self, event):
         self.IsBusy = False
         unicode_string = event.data.pop()
@@ -334,7 +337,8 @@ class GoSyncController(wx.Frame):
         else:
             if self.sync_model.GetUseSystemNotifSetting():
                 if wxgtk4:
-                    nmsg = wx.adv.NotificationMessage(title="GoSync", message="Sync Completed with errors!\nPlease check ~/GoSync.log")
+                    nmsg = wx.adv.NotificationMessage(title="GoSync",
+                                                      message="Sync Completed with errors!\nPlease check ~/GoSync.log")
                     nmsg.SetFlags(wx.ICON_ERROR)
                     nmsg.Show(timeout=wx.adv.NotificationMessage.Timeout_Auto)
                 else:
@@ -363,7 +367,7 @@ class GoSyncController(wx.Frame):
         else:
             self.Bind(wx.EVT_MENU, func, id=item.GetId())
 
-        if wxgtk4 :
+        if wxgtk4:
             menu.Append(item)
         else:
             menu.AppendItem(item)
@@ -371,11 +375,11 @@ class GoSyncController(wx.Frame):
 
     def FileSizeHumanize(self, size):
         size = abs(size)
-        if (size==0):
+        if (size == 0):
             return "0B"
-        units = ['B','KB','MB','GB','TB','PB','EB','ZB','YB']
-        p = math.floor(math.log(size, 2)/10)
-        return "%.3f%s" % (size/math.pow(1024,p),units[long(p)])
+        units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+        p = math.floor(math.log(size, 2) / 10)
+        return "%.3f%s" % (size / math.pow(1024, p), units[long(p)])
 
     def OnExit(self, event):
         dial = wx.MessageDialog(None, 'GoSync will stop syncing files until restarted.\nAre you sure to quit?\n',
@@ -385,9 +389,9 @@ class GoSyncController(wx.Frame):
             if self.sync_model.IsSyncEnabled() or self.sync_model.IsSyncRunning():
                 self.sync_model.StopSync()
                 self.Disable()
-                if self.IsBusy :
+                if self.IsBusy:
                     self.sb.SetStatusText("Please wait while GoSync is Cancelling a Transfer")
-                else :
+                else:
                     self.sb.SetStatusText("Paused", 1)
                 self.sync_model.StopTheShow()
 
@@ -396,9 +400,9 @@ class GoSyncController(wx.Frame):
     def OnToggleSync(self, evt):
         if self.sync_model.IsSyncEnabled():
             self.sync_model.StopSync()
-            if self.IsBusy :
+            if self.IsBusy:
                 self.sb.SetStatusText("Please wait while GoSync is Cancelling a Transfer")
-            else :
+            else:
                 self.sb.SetStatusText("Sync is paused")
             self.sb.SetStatusText("Paused", 1)
             self.pr_item.SetItemLabel("Resume Sync")
@@ -410,11 +414,11 @@ class GoSyncController(wx.Frame):
             self.sync_now_mitem.Enable(True)
 
     def OnSyncNow(self, evt):
-        self.sync_model.time_left=1
+        self.sync_model.time_left = 1
 
     def OnAbout(self, evt):
         """About GoSync"""
-        if wxgtk4 :
+        if wxgtk4:
             about = wx.adv.AboutDialogInfo()
         else:
             about = wx.AboutDialogInfo()
@@ -427,7 +431,7 @@ class GoSyncController(wx.Frame):
         about.SetLicense(APP_LICENSE)
         about.AddDeveloper(APP_DEVELOPER)
         about.AddArtist(ART_DEVELOPER)
-        if wxgtk4 :
+        if wxgtk4:
             wx.adv.AboutBox(about)
         else:
             wx.AboutBox(about)
