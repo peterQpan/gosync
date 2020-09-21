@@ -1,11 +1,13 @@
 import wx
 import wx.lib.agw.customtreectrl as CT
-#from pydrive.drive import GoogleDrive
-#from pydrive.auth import GoogleAuth
-try :
+
+# from pydrive.drive import GoogleDrive
+# from pydrive.auth import GoogleAuth
+try:
     from .GoSyncEvents import *
 except (ImportError, ValueError):
     from GoSyncEvents import *
+
 
 class GoSyncDriveTree(CT.CustomTreeCtrl):
     def __init__(self, parent, *args, **kw):
@@ -30,6 +32,7 @@ class GoSyncDriveTree(CT.CustomTreeCtrl):
 
         return checkedItems
 
+
 class SelectionPage(wx.Panel):
     def __init__(self, parent, sync_model):
         wx.Panel.__init__(self, parent, style=wx.RAISED_BORDER)
@@ -37,9 +40,9 @@ class SelectionPage(wx.Panel):
         headerFont = wx.Font(11.5, wx.SWISS, wx.NORMAL, wx.NORMAL)
 
         self.sync_model = sync_model
-        self.dstc = GoSyncDriveTree(self, pos=(0,0))
+        self.dstc = GoSyncDriveTree(self, pos=(0, 0))
 
-        self.t1 = wx.StaticText(self, -1, "Choose the directories to sync:", pos=(0,0))
+        self.t1 = wx.StaticText(self, -1, "Choose the directories to sync:", pos=(0, 0))
         self.t1.SetFont(headerFont)
 
         self.cb = wx.CheckBox(self, -1, 'Sync Everything', (10, 10))
@@ -60,7 +63,7 @@ class SelectionPage(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.t1, 0, wx.ALL)
         sizer.Add(self.cb, 0, wx.ALL)
-        sizer.Add(self.dstc, 1, wx.EXPAND,2)
+        sizer.Add(self.dstc, 1, wx.EXPAND, 2)
         self.SetSizer(sizer)
 
     def OnUsageCalculationStarted(self, event):
@@ -87,10 +90,10 @@ class SelectionPage(wx.Panel):
             folder = self.dstc.GetPyData(item)
             self.sync_model.SetSyncSelection(folder)
 
-        #folder = self.dstc.GetPyData(event.GetItem())
-        #if event.GetItem().IsChecked():
+        # folder = self.dstc.GetPyData(event.GetItem())
+        # if event.GetItem().IsChecked():
         #    self.sync_model.SetSyncSelection(folder)
-        #else:
+        # else:
         #    self.sync_model.RemoveSyncSelection(folder)
 
     def MakeDriveTree(self, gnode, tnode):
@@ -100,7 +103,7 @@ class SelectionPage(wx.Panel):
             self.dstc.SetPyData(nnode, f)
             self.MakeDriveTree(f, nnode)
 
-    def GetItemsToBeChecked(self, checklist, itemParent = None, itemToBeChecked = None):
+    def GetItemsToBeChecked(self, checklist, itemParent=None, itemToBeChecked=None):
         if itemParent is None:
             itemParent = self.dstc.GetRootItem()
 
@@ -140,11 +143,10 @@ class SelectionPage(wx.Panel):
                 self.cb.SetValue(False)
                 self.dstc.Enable()
                 self.dstc.SetFocus()
-                #break
+                # break
 
         item_list = self.GetItemsToBeChecked(sync_list)
         for item in item_list:
             self.dstc.CheckItem(item)
             self.dstc.Expand(item)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED, self.ItemChecked)
-
