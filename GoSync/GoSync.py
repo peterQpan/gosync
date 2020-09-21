@@ -17,9 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import sys, os, wx
-from os.path import expanduser, dirname, relpath
-try : 
+import sys
+
+try :
     from .GoSyncModel import *
     from .GoSyncController import GoSyncController
     from .defines import *
