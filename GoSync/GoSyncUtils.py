@@ -18,6 +18,7 @@
 
 import threading
 
+
 class AtomicVariable(object):
     def __init__(self, initial):
         self._value = initial
