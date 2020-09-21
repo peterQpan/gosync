@@ -112,17 +112,16 @@ audio_file_mimelist = ['audio/mpeg', 'audio/x-mpeg-3', 'audio/mpeg3', 'audio/aif
                        'audio/mp4', 'audio/flac', 'audio/mp3']
 movie_file_mimelist = ['video/mp4', 'video/x-msvideo', 'video/mpeg', 'video/flv', 'video/quicktime']
 image_file_mimelist = ['image/png', 'image/jpeg', 'image/jpg', 'image/tiff']
-document_file_mimelist = ['application/powerpoint', 'applciation/mspowerpoint', \
-                          'application/x-mspowerpoint', 'application/pdf', \
-                          'application/x-dvi']
-google_docs_mimelist = ['application/vnd.google-apps.spreadsheet', \
-                        'application/vnd.google-apps.sites', \
-                        'application/vnd.google-apps.script', \
-                        'application/vnd.google-apps.presentation', \
-                        'application/vnd.google-apps.fusiontable', \
-                        'application/vnd.google-apps.form', \
-                        'application/vnd.google-apps.drawing', \
-                        'application/vnd.google-apps.document', \
+document_file_mimelist = ['application/powerpoint', 'applciation/mspowerpoint', 'application/x-mspowerpoint',
+                          'application/pdf', 'application/x-dvi']
+google_docs_mimelist = ['application/vnd.google-apps.spreadsheet',
+                        'application/vnd.google-apps.sites',
+                        'application/vnd.google-apps.script',
+                        'application/vnd.google-apps.presentation',
+                        'application/vnd.google-apps.fusiontable',
+                        'application/vnd.google-apps.form',
+                        'application/vnd.google-apps.drawing',
+                        'application/vnd.google-apps.document',
                         'application/vnd.google-apps.map']
 
 Default_Log_Level = 3
@@ -1201,7 +1200,7 @@ class GoSyncModel(object):
             retryCounter -= 1
             if retryCounter > 0:
                 self.SendlToLog(1, "DownloadFileByObject: Download error (%s). Retrying... (%s)" % (
-                exceptionMsg, str(retryCounter)))
+                    exceptionMsg, str(retryCounter)))
                 time.sleep(5)
             else:
                 self.SendlToLog(1, "DownloadFileByObject: Download error (%s). Aborting..." % exceptionMsg)
@@ -1237,7 +1236,7 @@ class GoSyncModel(object):
                                 "DownloadFileByObject: Skipping File (%s) - Local and Remote - Same Name but Different Content.\n" % abs_filepath)
         else:
             self.SendlToLog(3, 'DownloadFileByObject: Download Started - File (%s), size (%s)' % (
-            abs_filepath, file_obj['size']))
+                abs_filepath, file_obj['size']))
             total_size = int(file_obj['size'])
             fd = abs_filepath.split(self.mirror_directory + '/')[1]
             retries = 5
@@ -1297,7 +1296,7 @@ class GoSyncModel(object):
     #### SyncRemoteDirectory
     def SyncRemoteDirectory(self, parent, pwd, recursive=True):
         self.SendlToLog(3, "### SyncRemoteDirectory: - Sync Started - Remote Directory (%s) ... Recursive = %s\n" % (
-        pwd, recursive))
+            pwd, recursive))
         if not self.syncRunning.is_set() or self.shutting_down:
             self.SendlToLog(2, "SyncRemoteDirectory: Sync has been paused. Aborting.\n")
             return
@@ -1374,7 +1373,7 @@ class GoSyncModel(object):
             self.SendlToLog(1, "SyncRemoteDirectory: Failed to sync directory (%s)" % f['name'])
             raise
         self.SendlToLog(3, "### SyncRemoteDirectory: - Sync Completed - Remote Directory (%s) ... Recursive = %s\n" % (
-        pwd, recursive))
+            pwd, recursive))
 
     #### validate_sync_settings
     def validate_sync_settings(self):
