@@ -29,7 +29,7 @@ except (ImportError, ValueError):
 import os, wx, math, webbrowser
 
 try:
-    from .GoSyncModel import GoSyncModel, ClientSecretsNotFound
+    from .GoSyncModel import GoSyncModel, ClientsAPICredentialsNotFound
     from .defines import *
     from .DriveUsageBox import DriveUsageBox
     from .GoSyncEvents import *
@@ -113,7 +113,7 @@ class GoSyncController(wx.Frame):
 
         try:
             self.sync_model = GoSyncModel()
-        except ClientSecretsNotFound:
+        except ClientsAPICredentialsNotFound:
             dial = wx.MessageDialog(None, 'Credentials file was not found!\n\nDo you want to know how to create one?\n',
                                     'Error', wx.YES_NO | wx.ICON_EXCLAMATION)
             res = dial.ShowModal()

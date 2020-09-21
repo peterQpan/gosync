@@ -54,8 +54,8 @@ except (ImportError, ValueError):
     from GoSyncUtils import *
 
 
-class ClientSecretsNotFound(RuntimeError):
-    """Client secrets file was not found"""
+class ClientsAPICredentialsNotFound(RuntimeError):
+    """Client credentials file was not found"""
 
 
 class FileNotFound(RuntimeError):
@@ -183,10 +183,10 @@ class GoSyncModel(object):
                 self.SendlToLog(3, "Initialize - Ask Location of Credentials File")
                 if (self.getCredentialFile() == False):
                     self.SendlToLog(1, "Initialize - Failled to load Credentials File")
-                    raise ClientSecretsNotFound()
+                    raise ClientsAPICredentialsNotFound()
             else:
                 self.SendlToLog(3, "Initialize - Declined to Locate Credentials File")
-                raise ClientSecretsNotFound()
+                raise ClientsAPICredentialsNotFound()
         self.SendlToLog(2, "Initialize - Completed Credentials Verification")
 
         self.SendlToLog(2, "Initialize - Saving credentials")
