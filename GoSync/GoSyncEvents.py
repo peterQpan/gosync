@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, wx
+import wx
 
 GOSYNC_EVENT_CALCULATE_USAGE_STARTED = '_gosync_calculate_usage_started'
 GOSYNC_EVENT_CALCULATE_USAGE_UPDATE = '_gosync_calculate_usage_update'
@@ -46,12 +46,14 @@ GOSYNC_EVENT_ID_SCAN_UPDATE = wx.NewId()
 GOSYNC_EVENT_ID_INTERNET_UNREACHABLE = wx.NewId()
 GOSYNC_EVENT_ID_MIRROR_DIRECTORY_MOVE = wx.NewId()
 
+
 class GoSyncEvent(wx.PyEvent):
     def __init__(self, event, data):
         wx.PyEvent.__init__(self)
 
         self.SetEventType(event)
         self.data = data
+
 
 # A singleton class for event passing between
 # different modules of GoSync
@@ -70,9 +72,9 @@ class GoSyncEventController(object):
                     GOSYNC_EVENT_INTERNET_UNREACHABLE: GOSYNC_EVENT_ID_INTERNET_UNREACHABLE,
                     GOSYNC_EVENT_MIRROR_DIRECTORY_MOVE: GOSYNC_EVENT_ID_MIRROR_DIRECTORY_MOVE,
                     GOSYNC_EVENT_SYNC_INV_FOLDER: GOSYNC_EVENT_ID_SYNC_INV_FOLDER}
-    _sync_listeners = {GOSYNC_EVENT_BUSY_STARTED:[],
+    _sync_listeners = {GOSYNC_EVENT_BUSY_STARTED: [],
                        GOSYNC_EVENT_BUSY_DONE: [],
-                       GOSYNC_EVENT_SYNC_STARTED:[],
+                       GOSYNC_EVENT_SYNC_STARTED: [],
                        GOSYNC_EVENT_SYNC_UPDATE: [],
                        GOSYNC_EVENT_SYNC_DONE: [],
                        GOSYNC_EVENT_CALCULATE_USAGE_STARTED: [],
@@ -100,7 +102,7 @@ class GoSyncEventController(object):
     def BindEvent(self, notify_object, event, func):
         if not notify_object:
             raise ValueError("Invalid notify object")
-    
+
         if not self._sync_events[event]:
             raise ValueError("Invalid event")
 
