@@ -154,7 +154,7 @@ class GoSyncModel(object):
         self.client_pickle = os.path.join(self.config_path, "token.pickle")
         self.settings_file = os.path.join(self.config_path, "settings.yaml")
         self.base_mirror_directory = os.path.join(os.environ['HOME'], "Google Drive")
-        self.client_secret_file = os.path.join(os.environ['HOME'], '.gosync', 'client_secrets.json')
+        #self.client_secret_file = os.path.join(os.environ['HOME'], '.gosync', 'client_secrets.json')
         self.sync_selection = []
         self.config_file = os.path.join(os.environ['HOME'], '.gosync', 'gosyncrc')
         self.config_dict = {}
